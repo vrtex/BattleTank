@@ -11,12 +11,11 @@ void ABT_PlayerController::BeginPlay()
 	if(GetControlledTank())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Controlling tank %s"), *GetControlledTank()->GetName());
-
 	}
 	else
+	{
 		UE_LOG(LogTemp, Error, TEXT("No tank controlled"));
-
-
+	}
 }
 
 void ABT_PlayerController::Tick(float DeltaSeconds)
@@ -36,16 +35,12 @@ void ABT_PlayerController::AimTowardsCrosshair()
 	if(!Tank) return;
 
 	FVector HitLocation(0, 0, 0);
-	UE_LOG(LogTemp, Warning, TEXT("Initial hit location: %s"), *HitLocation.ToString());
 
-	if(!GetSightRayHitLocation(HitLocation))
-		return;
-
-	UE_LOG(LogTemp, Warning, TEXT("Hit location after line trace: %s"), *HitLocation.ToCompactString());
-
-	// linetrace through the crosshair
-	// get the impact point
-	// point a barrel there
+	if(GetSightRayHitLocation(HitLocation))
+	{
+		Tank->AimAtLocation(HitLocation);
+	}
+	return;
 }
 
 bool ABT_PlayerController::GetSightRayHitLocation(FVector & HitLocaton) const
@@ -55,12 +50,24 @@ bool ABT_PlayerController::GetSightRayHitLocation(FVector & HitLocaton) const
 	// otherwise return false
 
 	int32 SizeX, SizeY;
+	FVector LookDirection;
 
 	GetViewportSize(SizeX, SizeY);
 	
 	FVector2D DotLocation(SizeX * CrosshairLocationX, SizeY * CrosshairLocationY);
-	UE_LOG(LogTemp, Warning, TEXT("Dot location: %s"), *DotLocation.ToString());
+	GetWorldDirection(DotLocation, LookDirection);
 
+	FHitResult HitResult;
+	FVector TankLocation = PlayerCameraManager->GetCameraLocation();
+	FVector TraceEnd = TankLocation + LookDirection * AimRange;
+	bool bLookingAtGround = GetWorld()->LineTraceSingleByChannel(HitResult, TankLocation, TraceEnd, ECollisionChannel::ECC_Visibility);
+	if(!bLookingAtGround) return false;
+	HitLocaton = HitResult.Location;
+	return true;
+}
 
-	return false;
+void ABT_PlayerController::GetWorldDirection(FVector2D ScreenLocation, FVector & WorldDirection) const
+{
+	FVector CameraLocation;
+	DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraLocation, WorldDirection);
 }

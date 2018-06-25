@@ -8,10 +8,10 @@ void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(GetControlledTank())
+	Controlled = GetControlledTank();
+	if(Controlled)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AI Controlling tank %s"), *GetControlledTank()->GetName());
-
+		UE_LOG(LogTemp, Warning, TEXT("AI Controlling tank %s"), *Controlled->GetName());
 	}
 	else
 		UE_LOG(LogTemp, Error, TEXT("No tank controlled by AI"));
@@ -21,12 +21,18 @@ void ATankAIController::BeginPlay()
 
 }
 
+void ATankAIController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	if(!GetPlayerTank()) return;
+	Controlled->AimAtLocation(GetPlayerTank()->GetActorLocation());
+}
+
 
 ATank * ATankAIController::GetControlledTank() const
 {
 	return Cast<ATank>(GetPawn());
 }
-
 
 ATank * ATankAIController::GetPlayerTank() const
 {

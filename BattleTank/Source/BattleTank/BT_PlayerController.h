@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include "Runtime/Engine/Public/DrawDebugHelpers.h"
+#include "Runtime/Engine/Classes/Engine/World.h"
+#include "Runtime/Engine/Classes/GameFramework/Actor.h"
 #include "Tank.h"
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
@@ -20,18 +23,24 @@ public:
 	void virtual BeginPlay() override;
 
 	void virtual Tick(float DeltaSeconds) override;
+
 	
 
 	ATank * GetControlledTank() const;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float CrosshairLocationX = 0.5f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float CrosshairLocationY = 0.333f;
 private:
 	void AimTowardsCrosshair();
 	
 	bool GetSightRayHitLocation(FVector & HitLocaton) const;
 
-	UPROPERTY(EditAnywhere)
-		float CrosshairLocationX = 0.5f;
+	void GetWorldDirection(FVector2D ScreenLocation, FVector & WorldDirection) const;
+
 
 	UPROPERTY(EditAnywhere)
-		float CrosshairLocationY = 0.333f;
+		float AimRange = 1000000.f;
 };
