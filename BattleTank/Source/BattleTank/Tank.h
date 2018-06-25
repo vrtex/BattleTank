@@ -3,6 +3,7 @@
 #pragma once
 // sdd
 
+#include "TankTurret.h"
 #include "TankBarrel.h"
 #include "TankAimingComponent.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
@@ -25,7 +26,11 @@ public:
 		void SetBarrelComponent(UTankBarrel * Component);
 
 	UFUNCTION(Blueprintcallable, Category = Setup)
-		void SetTurretComponent(UStaticMeshComponent * Component);
+		void SetTurretComponent(UTankTurret * Component);
+
+	UFUNCTION(Blueprintcallable)
+		void Fire();
+
 	
 	UPROPERTY(EditAnywhere, Category = Firing)
 		float LaunchSpeed = 10000.f; // TODO: find value that works

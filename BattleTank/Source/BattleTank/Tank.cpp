@@ -23,11 +23,15 @@ void ATank::SetBarrelComponent(UTankBarrel * Component)
 }
 
 
-void ATank::SetTurretComponent(UStaticMeshComponent * Component)
+void ATank::SetTurretComponent(UTankTurret * Component)
 {
 	TankAimingComponent->SetTurretComponent(Component);
 }
 
+void ATank::Fire()
+{
+	UE_LOG(LogTemp, Warning, TEXT("%s fires"), *GetName());
+}
 
 // Called when the game starts or when spawned
 void ATank::BeginPlay()

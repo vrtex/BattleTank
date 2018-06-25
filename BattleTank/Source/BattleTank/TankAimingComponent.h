@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "TankTurret.h"
 #include "TankBarrel.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
@@ -33,7 +34,7 @@ public:
 		
 	void SetBarrelComponent(UTankBarrel * Component);
 
-	void SetTurretComponent(UStaticMeshComponent * Component);
+	void SetTurretComponent(UTankTurret * Component);
 
 	void AimAtLocation(const FVector & Target, const float Speed);
 
@@ -41,7 +42,9 @@ private:
 
 	void MoveBarrel(const FVector & AimDirection);
 
+	void MoveTurret(const FVector & AimDirection);
+
 	UTankBarrel * Barrel = nullptr;
 
-	UStaticMeshComponent * Turret = nullptr;
+	UTankTurret * Turret = nullptr;
 };

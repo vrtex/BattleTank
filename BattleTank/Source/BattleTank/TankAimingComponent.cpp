@@ -37,7 +37,7 @@ void UTankAimingComponent::SetBarrelComponent(UTankBarrel * Component)
 	Barrel = Component;
 }
 
-void UTankAimingComponent::SetTurretComponent(UStaticMeshComponent * Component)
+void UTankAimingComponent::SetTurretComponent(UTankTurret * Component)
 {
 	Turret = Component;
 }
@@ -67,8 +67,9 @@ void UTankAimingComponent::AimAtLocation(const FVector & Target, const float Spe
 	//return;
 
 	FRotator TurretDirection(0, Direction.Yaw, 0);
-	Turret->SetWorldRotation(TurretDirection);
+	//Turret->SetWorldRotation(TurretDirection);
 	MoveBarrel(TossDirection);
+	MoveTurret(TossDirection);
 	//Barrel->SetRelativeRotation(BarrelDirection);
 }
 
@@ -78,6 +79,20 @@ void UTankAimingComponent::MoveBarrel(const FVector & AimDirection)
 	FRotator CurrentRotation = Barrel->GetForwardVector().Rotation();
 	FRotator Delta = TargetRotation - CurrentRotation;
 
+	if(FMath::Abs(Delta.Pitch) < 1.f) return;
 	Barrel->Elevate(Delta.Pitch);
+}
 
+void UTankAimingComponent::MoveTurret(const FVector & AimDirection)
+{
+	FRotator TargetRotation = AimDirection.Rotation();
+	FRotator CurrentRotation = Turret->GetForwardVector().Rotation();
+	FRotator Delta = TargetRotation - CurrentRotation;
+	if(FMath::Abs(Delta .Yaw) > 180.f)
+		Delta *= -1;
+	
+	if(FMath::Abs(Delta.Yaw) < 1.f) return;
+
+
+	Turret->Rotate(Delta.Yaw);
 }
