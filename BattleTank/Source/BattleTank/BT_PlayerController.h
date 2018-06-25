@@ -43,4 +43,5 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		float AimRange = 1000000.f;
+
 };

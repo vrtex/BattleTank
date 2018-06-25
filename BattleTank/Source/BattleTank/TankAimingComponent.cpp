@@ -48,15 +48,25 @@ void UTankAimingComponent::AimAtLocation(const FVector & Target, const float Spe
 		return;
 
 	FVector TossDirection;
-	if(!UGameplayStatics::SuggestProjectileVelocity(this, 
+	bool bGotSolution = UGameplayStatics::SuggestProjectileVelocity
+	(
+		this,
 		TossDirection,
-		Barrel->GetSocketLocation(FName("FiringPoint")), Target, Speed))
+		Barrel->GetSocketLocation(FName("FiringPoint")), Target, Speed,
+		false,
+		0.f,
+		0.f,
+		ESuggestProjVelocityTraceOption::DoNotTrace
+	);
+	if(!bGotSolution)
+	{
 		return;
+	}
+
 	FRotator Direction = TossDirection.Rotation();
 	//return;
 
 	FRotator TurretDirection(0, Direction.Yaw, 0);
-	FRotator BarrelDirection(Direction.Pitch, 0, 0);
 	Turret->SetWorldRotation(TurretDirection);
 	MoveBarrel(TossDirection);
 	//Barrel->SetRelativeRotation(BarrelDirection);
@@ -68,7 +78,6 @@ void UTankAimingComponent::MoveBarrel(const FVector & AimDirection)
 	FRotator CurrentRotation = Barrel->GetForwardVector().Rotation();
 	FRotator Delta = TargetRotation - CurrentRotation;
 
-	Barrel->Elevate(5); // TODO: kill this magic number
+	Barrel->Elevate(Delta.Pitch);
 
-	// Barrel->AddRelativeRotation(Delta);
 }

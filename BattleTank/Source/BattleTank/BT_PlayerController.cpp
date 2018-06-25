@@ -16,6 +16,7 @@ void ABT_PlayerController::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("No tank controlled"));
 	}
+
 }
 
 void ABT_PlayerController::Tick(float DeltaSeconds)
