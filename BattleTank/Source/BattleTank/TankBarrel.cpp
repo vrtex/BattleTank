@@ -17,6 +17,7 @@ void UTankBarrel::Shoot(TSubclassOf<AProjectile> ProjectileClass, float Speed) c
 	FVector Location = GetSocketLocation(FName("FiringPoint"));
 	FRotator Rotation = GetSocketRotation(FName("FiringPoint"));
 
-	auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
+	AProjectile * Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
+	while(!Projectile);
 	Projectile->Launch(Speed);
 }

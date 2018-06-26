@@ -24,13 +24,13 @@ public:
 	void Shoot(TSubclassOf<AProjectile> ProjectileClass, float Speed) const;
 
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		float MaxSpeed = 10.f;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		float MinElevation = -3.f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		float MaxElevation = 35.f;
 
 };

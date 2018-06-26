@@ -3,6 +3,7 @@
 #pragma once
 // sdd
 
+#include "TankTrack.h"
 #include "Projectile.h"
 #include "TankTurret.h"
 #include "TankBarrel.h"
@@ -33,11 +34,11 @@ public:
 		void Fire();
 
 	
-	UPROPERTY(EditAnywhere, Category = Firing)
-		float LaunchSpeed = 10000.f; // TODO: find value that works
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+		float LaunchSpeed = 8000.f;
 
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 		TSubclassOf<AProjectile> ProjectileClass;
 
 protected:
@@ -46,7 +47,7 @@ protected:
 
 	UTankAimingComponent * TankAimingComponent = nullptr;
 
-public:	
+public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -54,5 +55,10 @@ public:
 private:
 
 	UTankBarrel * Barrel = nullptr;
+
+	// In seconds
+	UPROPERTY(EditDefaultsOnly)
+		float ReloadTime = 3.f;
 	
+	float LastTimeShot = 0.f;
 };

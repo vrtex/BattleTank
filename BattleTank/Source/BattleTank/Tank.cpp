@@ -33,6 +33,11 @@ void ATank::Fire()
 {
 	if(!Barrel)
 		return;
+
+	if(FPlatformTime::Seconds() - LastTimeShot < ReloadTime)
+		return;
+
+	LastTimeShot = FPlatformTime::Seconds();
 	Barrel->Shoot(ProjectileClass, LaunchSpeed);
 }
 
