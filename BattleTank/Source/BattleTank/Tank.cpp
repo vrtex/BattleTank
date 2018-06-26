@@ -20,6 +20,7 @@ void ATank::AimAtLocation(const FVector & Target)
 void ATank::SetBarrelComponent(UTankBarrel * Component)
 {
 	TankAimingComponent->SetBarrelComponent(Component);
+	Barrel = Component;
 }
 
 
@@ -30,7 +31,9 @@ void ATank::SetTurretComponent(UTankTurret * Component)
 
 void ATank::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s fires"), *GetName());
+	if(!Barrel)
+		return;
+	Barrel->Shoot(ProjectileClass, LaunchSpeed);
 }
 
 // Called when the game starts or when spawned

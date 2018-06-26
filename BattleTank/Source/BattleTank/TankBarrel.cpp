@@ -11,3 +11,12 @@ void UTankBarrel::Elevate(float RelativeSpeed)
 
 	SetRelativeRotation(FRotator(NewElevation, 0, 0));
 }
+
+void UTankBarrel::Shoot(TSubclassOf<AProjectile> ProjectileClass, float Speed) const
+{
+	FVector Location = GetSocketLocation(FName("FiringPoint"));
+	FRotator Rotation = GetSocketRotation(FName("FiringPoint"));
+
+	auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
+	Projectile->Launch(Speed);
+}

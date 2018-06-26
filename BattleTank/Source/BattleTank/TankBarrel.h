@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "Runtime/Engine/Classes/Engine/StaticMeshSocket.h"
+#include "Projectile.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
 #include "CoreMinimal.h"
 #include "Components/StaticMeshComponent.h"
@@ -18,6 +20,8 @@ class BATTLETANK_API UTankBarrel : public UStaticMeshComponent
 	
 public:
 	void Elevate(float RelativeSpeed);
+
+	void Shoot(TSubclassOf<AProjectile> ProjectileClass, float Speed) const;
 
 private:
 	UPROPERTY(EditAnywhere)

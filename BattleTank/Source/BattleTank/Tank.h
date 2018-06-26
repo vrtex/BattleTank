@@ -3,6 +3,7 @@
 #pragma once
 // sdd
 
+#include "Projectile.h"
 #include "TankTurret.h"
 #include "TankBarrel.h"
 #include "TankAimingComponent.h"
@@ -35,15 +36,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = Firing)
 		float LaunchSpeed = 10000.f; // TODO: find value that works
 
-	/*
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		UStaticMeshComponent * TurretComponent;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		UStaticMeshComponent * Turret;
-	*/
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AProjectile> ProjectileClass;
 
-	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -55,6 +51,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
+private:
+
+	UTankBarrel * Barrel = nullptr;
 	
 };
