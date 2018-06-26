@@ -2,7 +2,10 @@
 
 #include "TankMovementComponent.h"
 
-
+UTankMovementComponent::UTankMovementComponent()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Creating"));
+}
 
 void UTankMovementComponent::SetTracks(UTankTrack * Left, UTankTrack * Right)
 {
@@ -19,6 +22,16 @@ void UTankMovementComponent::IntendMoveForward(float Throw)
 {
 	if(!LeftTrack || !RightTrack)
 		return;
-	LeftTrack->SetThrottle(Throw);
+
 	RightTrack->SetThrottle(Throw);
+	LeftTrack->SetThrottle(Throw);
+}
+
+void UTankMovementComponent::IntendMoveRight(float Throw)
+{
+	if(!LeftTrack || !RightTrack)
+		return;
+
+	LeftTrack->SetThrottle(Throw);
+	RightTrack->SetThrottle(-Throw);
 }

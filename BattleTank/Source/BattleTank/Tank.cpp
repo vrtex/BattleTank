@@ -14,13 +14,13 @@ ATank::ATank()
 	TankMovement = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component"));
 	if(!TankMovement)
 		UE_LOG(LogTemp, Error, TEXT("DUPA"));
+	
 }
 
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void ATank::AimAtLocation(const FVector & Target)
