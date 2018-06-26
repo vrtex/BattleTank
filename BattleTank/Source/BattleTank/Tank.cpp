@@ -10,6 +10,17 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+
+	TankMovement = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component"));
+	if(!TankMovement)
+		UE_LOG(LogTemp, Error, TEXT("DUPA"));
+}
+
+// Called when the game starts or when spawned
+void ATank::BeginPlay()
+{
+	Super::BeginPlay();
+	
 }
 
 void ATank::AimAtLocation(const FVector & Target)
@@ -39,13 +50,6 @@ void ATank::Fire()
 
 	LastTimeShot = FPlatformTime::Seconds();
 	Barrel->Shoot(ProjectileClass, LaunchSpeed);
-}
-
-// Called when the game starts or when spawned
-void ATank::BeginPlay()
-{
-	Super::BeginPlay();
-	
 }
 
 // Called to bind functionality to input

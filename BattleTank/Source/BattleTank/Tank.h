@@ -3,6 +3,7 @@
 #pragma once
 // sdd
 
+#include "TankMovementComponent.h"
 #include "TankTrack.h"
 #include "Projectile.h"
 #include "TankTurret.h"
@@ -46,6 +47,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	UTankAimingComponent * TankAimingComponent = nullptr;
+
+	UPROPERTY(BlueprintReadOnly)
+	UTankMovementComponent * TankMovement = nullptr;
 
 public:
 
