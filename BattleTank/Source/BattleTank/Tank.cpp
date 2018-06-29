@@ -11,10 +11,12 @@ ATank::ATank()
 
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
 
+	/*
 	UE_LOG(LogTemp, Warning, TEXT("Creating movement component on tank: %s"), *GetName());
 	TankMovement = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component"));
 	if(!TankMovement)
 		UE_LOG(LogTemp, Error, TEXT("DUPA"));
+	*/
 	
 }
 

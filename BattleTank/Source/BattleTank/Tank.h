@@ -54,9 +54,11 @@ protected:
 
 public:
 
-
+	/*
 	UPROPERTY(BlueprintReadOnly)
 		UTankMovementComponent * TankMovement = nullptr;
+	*/
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
