@@ -28,14 +28,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Movement)
 		void IntendMoveRight(float Throw);
 
+private:
+
 	void RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed) override;
 
 protected:
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	
 private:
 	
 	UTankTrack * LeftTrack = nullptr, * RightTrack = nullptr;
-
 };

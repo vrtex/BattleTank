@@ -7,11 +7,6 @@ UTankMovementComponent::UTankMovementComponent()
 	UE_LOG(LogTemp, Warning, TEXT("Creating"));
 }
 
-void UTankMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
-{
-	//UE_LOG(LogTemp, Warning, TEXT("%s ticking"), *GetOwner()->GetName());
-}
-
 void UTankMovementComponent::SetTracks(UTankTrack * Left, UTankTrack * Right)
 {
 	if(!Left || !Right)
@@ -21,8 +16,6 @@ void UTankMovementComponent::SetTracks(UTankTrack * Left, UTankTrack * Right)
 	}
 	LeftTrack = Left;
 	RightTrack = Right;
-
-
 }
 
 void UTankMovementComponent::IntendMoveForward(float Throw)
