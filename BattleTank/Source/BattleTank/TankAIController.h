@@ -31,4 +31,7 @@ public:
 private:
 	ATank * Controlled = nullptr;
 
+	UPROPERTY(EditDefaultsOnly)
+		float AcceptanceRadius = 3000;
+
 };

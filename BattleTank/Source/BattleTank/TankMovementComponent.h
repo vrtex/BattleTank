@@ -28,6 +28,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Movement)
 		void IntendMoveRight(float Throw);
 
+	void RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed) override;
+
 protected:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
