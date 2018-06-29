@@ -4,6 +4,7 @@
 
 #include "TankTrack.h"
 #include "CoreMinimal.h"
+#include "Runtime/Engine/Classes/GameFramework/Actor.h"
 #include "GameFramework/NavMovementComponent.h"
 #include "TankMovementComponent.generated.h"
 
@@ -26,6 +27,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Movement)
 		void IntendMoveRight(float Throw);
+
+protected:
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
 	
 private:
 	

@@ -11,6 +11,7 @@ ATank::ATank()
 
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
 
+	UE_LOG(LogTemp, Warning, TEXT("Creating movement component on tank: %s"), *GetName());
 	TankMovement = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component"));
 	if(!TankMovement)
 		UE_LOG(LogTemp, Error, TEXT("DUPA"));
@@ -34,6 +35,13 @@ void ATank::SetBarrelComponent(UTankBarrel * Component)
 	Barrel = Component;
 }
 
+/*
+void ATank::SetTracks(UTankTrack * Left, UTankTrack * Right)
+{
+	TankMovement->SetTracks(Left, Right);
+}
+*/
+
 
 void ATank::SetTurretComponent(UTankTurret * Component)
 {
@@ -45,10 +53,11 @@ void ATank::Fire()
 	if(!Barrel)
 		return;
 
-	if(FPlatformTime::Seconds() - LastTimeShot < ReloadTime)
+	
+	if(GetWorld()->GetTimeSeconds() - LastTimeShot < ReloadTime)
 		return;
 
-	LastTimeShot = FPlatformTime::Seconds();
+	LastTimeShot = GetWorld()->GetTimeSeconds();
 	Barrel->Shoot(ProjectileClass, LaunchSpeed);
 }
 

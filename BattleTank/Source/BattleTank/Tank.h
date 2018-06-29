@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-// sdd
 
 #include "TankMovementComponent.h"
 #include "TankTrack.h"
@@ -31,6 +30,11 @@ public:
 	UFUNCTION(Blueprintcallable, Category = Setup)
 		void SetTurretComponent(UTankTurret * Component);
 
+	/*
+	UFUNCTION(Blueprintcallable, Category = Setup)
+		void SetTracks(UTankTrack * Left, UTankTrack * Right);
+	*/
+
 	UFUNCTION(Blueprintcallable)
 		void Fire();
 
@@ -48,11 +52,11 @@ protected:
 
 	UTankAimingComponent * TankAimingComponent = nullptr;
 
-	UPROPERTY(BlueprintReadOnly)
-	UTankMovementComponent * TankMovement = nullptr;
-
 public:
 
+
+	UPROPERTY(BlueprintReadOnly)
+		UTankMovementComponent * TankMovement = nullptr;
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -64,5 +68,5 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 		float ReloadTime = 3.f;
 	
-	float LastTimeShot = 0.f;
+	float LastTimeShot = -30.f;
 };
