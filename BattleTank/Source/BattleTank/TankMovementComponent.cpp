@@ -4,7 +4,6 @@
 
 UTankMovementComponent::UTankMovementComponent()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Creating"));
 }
 
 void UTankMovementComponent::SetTracks(UTankTrack * Left, UTankTrack * Right)

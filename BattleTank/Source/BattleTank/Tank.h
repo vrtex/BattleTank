@@ -25,14 +25,6 @@ public:
 
 	void AimAtLocation(const FVector & Target);
 
-	UFUNCTION(Blueprintcallable, Category = "Setup")
-		void SetBarrelComponent(UTankBarrel * Component);
-
-	/*
-	UFUNCTION(Blueprintcallable, Category = "Setup")
-		void SetTurretComponent(UTankTurret * Component);
-	*/
-
 	UFUNCTION(BlueprintPure, Category = "Setup")
 		UTankAimingComponent * GetAimingComponent();
 
@@ -45,18 +37,15 @@ public:
 		void Fire();
 
 	
+	// Passed on to aiming component;
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float LaunchSpeed = 8000.f;
-
-
-	UPROPERTY(EditDefaultsOnly)
-		TSubclassOf<AProjectile> ProjectileClass;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		UTankAimingComponent * TankAimingComponent = nullptr;
 	
 
@@ -76,14 +65,7 @@ private:
 		void Reload();
 	*/
 
-	UTankBarrel * Barrel = nullptr;
-
 	// In seconds
 	UPROPERTY(EditDefaultsOnly)
 		float ReloadTime = 3.f;
-	
-	float LastTimeShot = -30.f;
-
-	bool reloaded = true;
-
 };

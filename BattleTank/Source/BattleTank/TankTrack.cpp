@@ -3,16 +3,47 @@
 #include "TankTrack.h"
 
 
+UTankTrack::UTankTrack()
+{
+	PrimaryComponentTick.bCanEverTick = false;
+	CurrentThrottle = 0.f;
+}
 
+void UTankTrack::BeginPlay()
+{
+	Super::BeginPlay();
+
+	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
+}
+
+void UTankTrack::ApplySidewaysForce()
+{
+	UStaticMeshComponent * TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
+
+	FVector CorrectionAcceleration = -FVector::DotProduct(GetRightVector(), GetComponentVelocity()) / GetWorld()->GetDeltaSeconds() * GetRightVector();
+
+	FVector CorrectionForce = CorrectionAcceleration * TankRoot->GetMass() / 2;
+
+	TankRoot->AddForce(CorrectionForce);
+}
 
 void UTankTrack::SetThrottle(float Throttle)
 {
-	Throttle = FMath::Clamp(Throttle, -1.f, 1.f);
-	FVector ForceApplied = GetForwardVector() * Power * Throttle;
+	CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle, -1.f, 1.f);
+	CurrentThrottle = Throttle;
+}
+
+void UTankTrack::DriveTrack()
+{
+	UE_LOG(LogTemp, Warning, TEXT("%f"), CurrentThrottle);
+	FVector ForceApplied = GetForwardVector() * Power * CurrentThrottle;
 	FVector Location = GetComponentLocation();
 	USceneComponent * TankRoot = GetOwner()->GetRootComponent();
-	if(!TankRoot)
-		return;
 	Cast<UPrimitiveComponent>(TankRoot)->AddForceAtLocation(ForceApplied, Location);
-	// TODO: clamp this shit
+}
+
+void UTankTrack::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
+{
+	DriveTrack();
+	ApplySidewaysForce();
 }

@@ -15,6 +15,11 @@ UTankAimingComponent::UTankAimingComponent()
 
 void UTankAimingComponent::SetParts(UTankBarrel * Barrel, UTankTurret * Turret)
 {
+	if(!Barrel || !Turret)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Can't find parts"));
+		FGenericPlatformMisc::RequestExit(false);
+	}
 	this->Barrel = Barrel;
 	this->Turret = Turret;
 }
@@ -23,6 +28,11 @@ void UTankAimingComponent::SetParts(UTankBarrel * Barrel, UTankTurret * Turret)
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	LastTimeShot = GetWorld()->GetTimeSeconds();
+	CurrentAimState = EAimState::Reloading;
+	bReloaded = false;
+	//ReloadDelegate.BindUFunction(this, FName("Reload"));
+	GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &UTankAimingComponent::Reload, ReloadTime, false, -1.f);
 }
 
 
@@ -30,8 +40,36 @@ void UTankAimingComponent::BeginPlay()
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if(!bReloaded)
+		CurrentAimState = EAimState::Reloading;
+	else if(bBarrelIsMoving)
+		CurrentAimState = EAimState::Moving;
+	else
+		CurrentAimState = EAimState::Locked;
+}
 
-	// ...
+void UTankAimingComponent::SetLaunchSpeed(float NewSpeed)
+{
+	LaunchSpeed = NewSpeed;
+}
+
+void UTankAimingComponent::Fire()
+{
+	if(!Barrel)
+		return;
+
+	if(!ensure(ProjectileBlueprint))
+		return;
+
+	if(!ProjectileBlueprint)
+		return;
+
+	if(!bReloaded)
+		return;
+
+	Barrel->Shoot(ProjectileBlueprint, LaunchSpeed);
+	bReloaded = false;
+	GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &UTankAimingComponent::Reload, ReloadTime, false, -1.f);
 }
 
 void UTankAimingComponent::SetBarrelComponent(UTankBarrel * Component)
@@ -44,17 +82,18 @@ void UTankAimingComponent::SetTurretComponent(UTankTurret * Component)
 	Turret = Component;
 }
 
-void UTankAimingComponent::AimAtLocation(const FVector & Target, const float Speed)
+void UTankAimingComponent::AimAtLocation(const FVector & Target)
 {
 	if(!ensure(Barrel) || !ensure(Turret))
 		return;
+	
 
 	FVector TossDirection;
 	bool bGotSolution = UGameplayStatics::SuggestProjectileVelocity
 	(
 		this,
 		TossDirection,
-		Barrel->GetSocketLocation(FName("FiringPoint")), Target, Speed,
+		Barrel->GetSocketLocation(FName("FiringPoint")), Target, LaunchSpeed,
 		false,
 		0.f,
 		0.f,
@@ -65,14 +104,17 @@ void UTankAimingComponent::AimAtLocation(const FVector & Target, const float Spe
 		return;
 	}
 
-	FRotator Direction = TossDirection.Rotation();
-	//return;
+	/*
+	*/
+	float BarrelPitch = Barrel->GetComponentRotation().Pitch;
+	float TurretYaw = Turret->GetComponentRotation().Yaw;
 
-	FRotator TurretDirection(0, Direction.Yaw, 0);
-	//Turret->SetWorldRotation(TurretDirection);
+	bBarrelIsMoving = true;
 	MoveBarrel(TossDirection);
 	MoveTurret(TossDirection);
-	//Barrel->SetRelativeRotation(BarrelDirection);
+	if(FMath::IsNearlyEqual(BarrelPitch, TossDirection.Rotation().Pitch, AimAccuracy) &&
+		FMath::IsNearlyEqual(TurretYaw, TossDirection.Rotation().Yaw, AimAccuracy))
+		bBarrelIsMoving = false;
 }
 
 void UTankAimingComponent::MoveBarrel(const FVector & AimDirection)
@@ -81,7 +123,7 @@ void UTankAimingComponent::MoveBarrel(const FVector & AimDirection)
 	FRotator CurrentRotation = Barrel->GetForwardVector().Rotation();
 	FRotator Delta = TargetRotation - CurrentRotation;
 
-	if(FMath::Abs(Delta.Pitch) < 1.f) return;
+	if(FMath::Abs(Delta.Pitch) < AimAccuracy) return;
 	Barrel->Elevate(Delta.Pitch);
 }
 
@@ -93,8 +135,12 @@ void UTankAimingComponent::MoveTurret(const FVector & AimDirection)
 	if(FMath::Abs(Delta .Yaw) > 180.f)
 		Delta *= -1;
 	
-	if(FMath::Abs(Delta.Yaw) < 1.f) return;
-
+	if(FMath::Abs(Delta.Yaw) < AimAccuracy) return;
 
 	Turret->Rotate(Delta.Yaw);
+}
+
+void UTankAimingComponent::Reload()
+{
+	bReloaded = true;
 }

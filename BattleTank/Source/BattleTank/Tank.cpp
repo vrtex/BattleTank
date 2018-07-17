@@ -11,6 +11,8 @@ ATank::ATank()
 
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
 
+	TankAimingComponent->SetLaunchSpeed(LaunchSpeed);
+	
 
 	/*
 	UE_LOG(LogTemp, Warning, TEXT("Creating movement component on tank: %s"), *GetName());
@@ -29,27 +31,8 @@ void ATank::BeginPlay()
 
 void ATank::AimAtLocation(const FVector & Target)
 {
-	TankAimingComponent->AimAtLocation(Target, LaunchSpeed);
+	TankAimingComponent->AimAtLocation(Target);
 }
-
-void ATank::SetBarrelComponent(UTankBarrel * Component)
-{
-	Barrel = Component;
-}
-
-/*
-void ATank::SetTracks(UTankTrack * Left, UTankTrack * Right)
-{
-	TankMovement->SetTracks(Left, Right);
-}
-*/
-
-/*
-void ATank::SetTurretComponent(UTankTurret * Component)
-{
-	// TankAimingComponent->SetTurretComponent(Component);
-}
-*/
 
 UTankAimingComponent * ATank::GetAimingComponent()
 {
@@ -58,27 +41,11 @@ UTankAimingComponent * ATank::GetAimingComponent()
 
 void ATank::Fire()
 {
-	if(!ensure(Barrel))
-		return;
-
-	
-	if(GetWorld()->GetTimeSeconds() - LastTimeShot < ReloadTime)
-		return;
-
-	LastTimeShot = GetWorld()->GetTimeSeconds();
-	Barrel->Shoot(ProjectileClass, LaunchSpeed);
+	TankAimingComponent->Fire();
 }
 
 // Called to bind functionality to input
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
-
-/*
-void ATank::Reload()
-{
-
-}
-*/
