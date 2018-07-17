@@ -11,6 +11,7 @@ ATank::ATank()
 
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
 
+
 	/*
 	UE_LOG(LogTemp, Warning, TEXT("Creating movement component on tank: %s"), *GetName());
 	TankMovement = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component"));
@@ -33,7 +34,6 @@ void ATank::AimAtLocation(const FVector & Target)
 
 void ATank::SetBarrelComponent(UTankBarrel * Component)
 {
-	TankAimingComponent->SetBarrelComponent(Component);
 	Barrel = Component;
 }
 
@@ -44,15 +44,21 @@ void ATank::SetTracks(UTankTrack * Left, UTankTrack * Right)
 }
 */
 
-
+/*
 void ATank::SetTurretComponent(UTankTurret * Component)
 {
-	TankAimingComponent->SetTurretComponent(Component);
+	// TankAimingComponent->SetTurretComponent(Component);
+}
+*/
+
+UTankAimingComponent * ATank::GetAimingComponent()
+{
+	return TankAimingComponent;
 }
 
 void ATank::Fire()
 {
-	if(!Barrel)
+	if(!ensure(Barrel))
 		return;
 
 	
@@ -70,3 +76,9 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+/*
+void ATank::Reload()
+{
+
+}
+*/

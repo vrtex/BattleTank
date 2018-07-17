@@ -2,10 +2,10 @@
 
 #pragma once
 
+#include "Tank.h"
 #include "Runtime/Engine/Public/DrawDebugHelpers.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
-#include "Tank.h"
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "BT_PlayerController.generated.h"
@@ -24,15 +24,20 @@ public:
 
 	void virtual Tick(float DeltaSeconds) override;
 
-	
-
-	ATank * GetControlledTank() const;
+	UFUNCTION(BlueprintCallable, Category = Setup)
+		ATank * GetControlledTank() const;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float CrosshairLocationX = 0.5f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float CrosshairLocationY = 0.333f;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+		void FoundAimingComponent(UTankAimingComponent * Comp);
+protected:
+
+
 private:
 	void AimTowardsCrosshair();
 	

@@ -7,6 +7,7 @@
 
 void UTankTrack::SetThrottle(float Throttle)
 {
+	Throttle = FMath::Clamp(Throttle, -1.f, 1.f);
 	FVector ForceApplied = GetForwardVector() * Power * Throttle;
 	FVector Location = GetComponentLocation();
 	USceneComponent * TankRoot = GetOwner()->GetRootComponent();

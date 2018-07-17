@@ -8,6 +8,7 @@
 #include "TankTurret.h"
 #include "TankBarrel.h"
 #include "TankAimingComponent.h"
+#include "Runtime/Engine/Public/TimerManager.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
@@ -24,11 +25,16 @@ public:
 
 	void AimAtLocation(const FVector & Target);
 
-	UFUNCTION(Blueprintcallable, Category = Setup)
+	UFUNCTION(Blueprintcallable, Category = "Setup")
 		void SetBarrelComponent(UTankBarrel * Component);
 
-	UFUNCTION(Blueprintcallable, Category = Setup)
+	/*
+	UFUNCTION(Blueprintcallable, Category = "Setup")
 		void SetTurretComponent(UTankTurret * Component);
+	*/
+
+	UFUNCTION(BlueprintPure, Category = "Setup")
+		UTankAimingComponent * GetAimingComponent();
 
 	/*
 	UFUNCTION(Blueprintcallable, Category = Setup)
@@ -50,7 +56,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UTankAimingComponent * TankAimingComponent = nullptr;
+	UPROPERTY(BlueprintReadOnly)
+		UTankAimingComponent * TankAimingComponent = nullptr;
+	
 
 public:
 
@@ -63,6 +71,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+	/*
+	UFUNCTION()
+		void Reload();
+	*/
 
 	UTankBarrel * Barrel = nullptr;
 
@@ -71,4 +83,7 @@ private:
 		float ReloadTime = 3.f;
 	
 	float LastTimeShot = -30.f;
+
+	bool reloaded = true;
+
 };

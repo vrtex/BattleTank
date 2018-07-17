@@ -8,7 +8,7 @@ void ABT_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(GetControlledTank())
+	if(ensure(GetControlledTank()))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Controlling tank %s"), *GetControlledTank()->GetName());
 	}
@@ -17,6 +17,8 @@ void ABT_PlayerController::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("No tank controlled"));
 	}
 
+	if(GetControlledTank())
+		FoundAimingComponent(GetControlledTank()->GetAimingComponent());
 }
 
 void ABT_PlayerController::Tick(float DeltaSeconds)
@@ -33,7 +35,7 @@ ATank * ABT_PlayerController::GetControlledTank() const
 void ABT_PlayerController::AimTowardsCrosshair()
 {
 	ATank * Tank = GetControlledTank();
-	if(!Tank) return;
+	if(!ensure(Tank)) return;
 
 	FVector HitLocation(0, 0, 0);
 

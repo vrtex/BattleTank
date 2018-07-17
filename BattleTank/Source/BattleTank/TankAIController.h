@@ -2,9 +2,8 @@
 
 #pragma once
 
-#include "BT_PlayerController.h"
-#include "Runtime/Engine/Classes/Engine/World.h"
 #include "Tank.h"
+#include "Runtime/Engine/Classes/Engine/World.h"
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "TankAIController.generated.h"

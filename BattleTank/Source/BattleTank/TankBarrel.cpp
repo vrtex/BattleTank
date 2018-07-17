@@ -14,6 +14,12 @@ void UTankBarrel::Elevate(float RelativeSpeed)
 
 void UTankBarrel::Shoot(TSubclassOf<AProjectile> ProjectileClass, float Speed) const
 {
+	if(!ensure(ProjectileClass))
+	{
+		UE_LOG(LogTemp, Error, TEXT("Stupid projjectile class"));
+		FGenericPlatformMisc::RequestExit(false);
+		return;
+	}
 	FVector Location = GetSocketLocation(FName("FiringPoint"));
 	FRotator Rotation = GetSocketRotation(FName("FiringPoint"));
 

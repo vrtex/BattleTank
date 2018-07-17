@@ -10,6 +10,13 @@
 #include "Components/ActorComponent.h"
 #include "TankAimingComponent.generated.h"
 
+UENUM()
+enum class EAimState : uint8
+{
+	Reloading,
+	Moving,
+	Locked
+};
 
 // Handles aiming by manipulating barrel and turret
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -17,14 +24,19 @@ class BATTLETANK_API UTankAimingComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+		void SetParts(UTankBarrel * Barrel, UTankTurret * Turret);
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	UPROPERTY(BlueprintReadOnly)
+	EAimState CurrentAimState = EAimState::Moving;
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -46,4 +58,5 @@ private:
 	UTankBarrel * Barrel = nullptr;
 
 	UTankTurret * Turret = nullptr;
+
 };

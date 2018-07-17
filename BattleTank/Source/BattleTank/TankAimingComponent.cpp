@@ -13,14 +13,16 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
+void UTankAimingComponent::SetParts(UTankBarrel * Barrel, UTankTurret * Turret)
+{
+	this->Barrel = Barrel;
+	this->Turret = Turret;
+}
 
 // Called when the game starts
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
 }
 
 
@@ -44,7 +46,7 @@ void UTankAimingComponent::SetTurretComponent(UTankTurret * Component)
 
 void UTankAimingComponent::AimAtLocation(const FVector & Target, const float Speed)
 {
-	if(!Barrel || !Turret)
+	if(!ensure(Barrel) || !ensure(Turret))
 		return;
 
 	FVector TossDirection;
