@@ -28,6 +28,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Movement)
 		void IntendMoveRight(float Throw);
 
+	UFUNCTION(BlueprintCallable, Category = Movement)
+		void SetDirection(float Forward, float Rigth);
+
 private:
 
 	void RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed) override;
@@ -37,4 +40,5 @@ protected:
 private:
 	
 	UTankTrack * LeftTrack = nullptr, * RightTrack = nullptr;
+	FVector CurrentDirection = FVector();
 };

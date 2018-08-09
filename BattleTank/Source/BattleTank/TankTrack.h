@@ -7,6 +7,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Runtime/Engine/Classes/Components/PrimitiveComponent.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
+#include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
 #include "TankTrack.generated.h"
 
 /**
@@ -22,6 +23,8 @@ public:
 	UTankTrack();
 
 	void BeginPlay() override;
+
+	void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, Category = Movement)
 	void SetThrottle(float Throttle);
