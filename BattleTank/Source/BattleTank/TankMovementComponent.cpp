@@ -35,18 +35,25 @@ void UTankMovementComponent::IntendMoveRight(float Throw)
 
 void UTankMovementComponent::SetDirection(float Forward, float Right)
 {
-	UE_LOG(LogTemp, Error, TEXT("I shouldnt be here"));
 	if(!LeftTrack || !RightTrack)
 		return;
 
-	CurrentDirection = FVector(Forward, Right, 0);
+
+	CurrentDirection = FVector(Right, 0, Forward);
 	//CurrentDirection = FVector(Forward, Right, 0);
 	/*
 	Forward /= 2;
 	Right /= 2;
-	*/
 	LeftTrack->SetThrottle(FMath::Sin(CurrentDirection.Rotation().Yaw));
 	RightTrack->SetThrottle(-FMath::Sin(CurrentDirection.Rotation().Yaw));
+	*/
+
+	float Force = CurrentDirection.Size();
+	float ForwardForce = FVector::DotProduct(FVector(0, 0, 1), CurrentDirection) * Force;
+	float RightForce = FVector::DotProduct(FVector(1, 0, 0), CurrentDirection) * Force;
+
+	LeftTrack->SetThrottle(RightForce + ForwardForce);
+	RightTrack->SetThrottle(-RightForce + ForwardForce);
 }
 
 void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed)

@@ -5,7 +5,7 @@
 
 UTankTrack::UTankTrack()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 }
 
@@ -17,24 +17,6 @@ void UTankTrack::BeginPlay()
 	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
 }
 
-void UTankTrack::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
-{
-	FHitResult HitResult;
-	FVector TraceEnd = GetSocketLocation(FName("Drive Socket"));
-	if(
-
-		GetWorld()->SweepTestByChannel(
-			GetComponentLocation(),
-			TraceEnd,
-			FQuat(),
-			ECollisionChannel::ECC_WorldStatic,
-			FCollisionShape::MakeBox(GetComponentLocation() - TraceEnd)
-		))
-
-	{
-		DriveTrack();
-	}
-}
 
 void UTankTrack::ApplySidewaysForce()
 {
@@ -50,7 +32,6 @@ void UTankTrack::ApplySidewaysForce()
 void UTankTrack::SetThrottle(float Throttle)
 {
 	CurrentThrottle = Throttle;
-
 }
 
 void UTankTrack::DriveTrack()
