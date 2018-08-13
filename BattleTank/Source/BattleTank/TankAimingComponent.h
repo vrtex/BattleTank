@@ -79,7 +79,7 @@ private:
 	bool bReloaded;
 
 	UPROPERTY(EditDefaultsOnly)
-		float ReloadTime = 3.f;
+		float ReloadTime = 1.f;
 
 	FTimerHandle ReloadTimer;
 

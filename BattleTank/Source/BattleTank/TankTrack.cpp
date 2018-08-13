@@ -36,7 +36,6 @@ void UTankTrack::SetThrottle(float Throttle)
 
 void UTankTrack::DriveTrack()
 {
-	UE_LOG(LogTemp, Warning, TEXT("%f throttle is: %f"), GetWorld()->GetTimeSeconds(), CurrentThrottle);
 	FVector ForceApplied = GetForwardVector() * Power * CurrentThrottle;
 	FVector Location = GetComponentLocation();
 	USceneComponent * TankRoot = GetOwner()->GetRootComponent();
@@ -45,7 +44,8 @@ void UTankTrack::DriveTrack()
 
 void UTankTrack::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%f HUEHUHEU"), GetWorld()->GetTimeSeconds());
 	DriveTrack();
 	ApplySidewaysForce();
+
+	CurrentThrottle = 0;
 }
