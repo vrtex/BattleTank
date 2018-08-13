@@ -25,5 +25,7 @@ void UTankBarrel::Shoot(TSubclassOf<AProjectile> ProjectileClass, float Speed) c
 
 	AProjectile * Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
 
+	UE_LOG(LogTemp, Warning, TEXT("Fire"));
+
 	Projectile->Launch(Speed);
 }

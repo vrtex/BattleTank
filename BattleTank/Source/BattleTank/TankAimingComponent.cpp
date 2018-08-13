@@ -45,7 +45,7 @@ void UTankAimingComponent::BeginPlay()
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if(CurrentAmmo == 0)
+	if(CurrentAmmo <= 0)
 		CurrentAimState = EAimState::NoAmmo;
 	else if(!bReloaded)
 		CurrentAimState = EAimState::Reloading;
@@ -95,6 +95,7 @@ void UTankAimingComponent::AimAtLocation(const FVector & Target)
 	if(!ensure(Barrel) || !ensure(Turret))
 		return;
 	
+
 
 	FVector TossDirection;
 	bool bGotSolution = UGameplayStatics::SuggestProjectileVelocity

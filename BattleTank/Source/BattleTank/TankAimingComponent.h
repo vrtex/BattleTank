@@ -76,7 +76,7 @@ private:
 
 	UTankTurret * Turret = nullptr;
 
-	float LaunchSpeed = 100.f;
+	float LaunchSpeed = 8000.f;
 
 	float LastTimeShot;
 
