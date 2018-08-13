@@ -18,7 +18,8 @@ enum class EAimState : uint8
 {
 	Reloading,
 	Moving,
-	Locked
+	Locked,
+	NoAmmo
 };
 
 // Handles aiming by manipulating barrel and turret
@@ -35,6 +36,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
 		void SetParts(UTankBarrel * Barrel, UTankTurret * Turret);
+
+	UFUNCTION(BlueprintCallable)
+		int32 GetCurrentAmmo() const;
 
 protected:
 	// Called when the game starts
@@ -58,6 +62,8 @@ public:
 
 	void AimAtLocation(const FVector & Target);
 
+	bool isLocked() const;
+
 private:
 
 	void MoveBarrel(const FVector & AimDirection);
@@ -79,12 +85,15 @@ private:
 	bool bReloaded;
 
 	UPROPERTY(EditDefaultsOnly)
-		float ReloadTime = 1.f;
+		float ReloadTime = 3.f;
 
 	FTimerHandle ReloadTimer;
 
 	UFUNCTION()
 		void Reload();
+
+	UPROPERTY(EditDefaultsOnly)
+		int32 CurrentAmmo = 3;
 
 
 

@@ -39,6 +39,11 @@ UTankAimingComponent * ATank::GetAimingComponent()
 	return TankAimingComponent;
 }
 
+bool ATank::isLocked() const
+{
+	return TankAimingComponent->isLocked();
+}
+
 void ATank::Fire()
 {
 	TankAimingComponent->Fire();

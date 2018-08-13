@@ -33,6 +33,8 @@ public:
 		void SetTracks(UTankTrack * Left, UTankTrack * Right);
 	*/
 
+	bool isLocked() const;
+
 	UFUNCTION(Blueprintcallable)
 		void Fire();
 

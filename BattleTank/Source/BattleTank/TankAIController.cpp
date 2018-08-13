@@ -31,7 +31,8 @@ void ATankAIController::Tick(float DeltaSeconds)
 
 	Controlled->AimAtLocation(GetPlayerTank()->GetActorLocation());
 
-	Controlled->Fire();
+	if(Controlled->isLocked())
+		Controlled->Fire();
 
 }
 
