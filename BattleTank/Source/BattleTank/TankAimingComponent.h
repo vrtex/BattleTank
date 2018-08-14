@@ -84,17 +84,14 @@ private:
 
 	bool bReloaded;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		float ReloadTime = 3.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+		int32 CurrentAmmo = 3;
 
 	FTimerHandle ReloadTimer;
 
 	UFUNCTION()
 		void Reload();
-
-	UPROPERTY(EditDefaultsOnly)
-		int32 CurrentAmmo = 3;
-
-
-
 };
