@@ -12,15 +12,6 @@ ATank::ATank()
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
 
 	TankAimingComponent->SetLaunchSpeed(LaunchSpeed);
-	
-
-	/*
-	UE_LOG(LogTemp, Warning, TEXT("Creating movement component on tank: %s"), *GetName());
-	TankMovement = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component"));
-	if(!TankMovement)
-		UE_LOG(LogTemp, Error, TEXT("DUPA"));
-	*/
-	
 }
 
 // Called when the game starts or when spawned
@@ -47,6 +38,13 @@ bool ATank::isLocked() const
 void ATank::Fire()
 {
 	TankAimingComponent->Fire();
+}
+
+float ATank::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+{
+	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+	UE_LOG(LogTemp, Warning, TEXT("Take damage: %f"), Damage);
+	return 0.0f;
 }
 
 // Called to bind functionality to input

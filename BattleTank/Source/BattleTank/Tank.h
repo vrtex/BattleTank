@@ -28,11 +28,6 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Setup")
 		UTankAimingComponent * GetAimingComponent();
 
-	/*
-	UFUNCTION(Blueprintcallable, Category = Setup)
-		void SetTracks(UTankTrack * Left, UTankTrack * Right);
-	*/
-
 	bool isLocked() const;
 
 	UFUNCTION(Blueprintcallable)
@@ -42,6 +37,8 @@ public:
 	// Passed on to aiming component;
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float LaunchSpeed = 8000.f;
+
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -53,19 +50,10 @@ protected:
 
 public:
 
-	/*
-	UPROPERTY(BlueprintReadOnly)
-		UTankMovementComponent * TankMovement = nullptr;
-	*/
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	/*
-	UFUNCTION()
-		void Reload();
-	*/
 
 	// In seconds
 	UPROPERTY(EditDefaultsOnly)

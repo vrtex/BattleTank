@@ -154,6 +154,5 @@ void UTankAimingComponent::MoveTurret(const FVector & AimDirection)
 
 void UTankAimingComponent::Reload()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Reloading"));
 	bReloaded = true;
 }
