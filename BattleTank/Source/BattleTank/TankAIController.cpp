@@ -17,6 +17,7 @@ void ATankAIController::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("No tank controlled by AI"));
 	}
 
+
 	if(!GetPlayerTank())
 		UE_LOG(LogTemp, Error, TEXT("Can't find player tank"));
 
@@ -36,6 +37,22 @@ void ATankAIController::Tick(float DeltaSeconds)
 
 }
 
+void ATankAIController::SetPawn(APawn * NewPawn)
+{
+	Super::SetPawn(NewPawn);
+
+	if(!NewPawn)
+		return;
+
+	ATank * PossesedTank = Cast<ATank>(NewPawn);
+	Controlled = PossesedTank;
+	if(!ensure(PossesedTank))
+		return;
+
+	// listen for death
+	PossesedTank->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnTankDeath);
+}
+
 
 ATank * ATankAIController::GetControlledTank() const
 {
@@ -47,4 +64,12 @@ ATank * ATankAIController::GetPlayerTank() const
 	auto Pawn = GetWorld()->GetFirstPlayerController()->GetPawn();
 	if(!Pawn) return nullptr;
 	return Cast<ATank>(Pawn);
+}
+
+void ATankAIController::OnTankDeath()
+{
+	UE_LOG(LogTemp, Error, TEXT("DED"));
+	if(!GetPawn())
+		return;
+	Controlled->DetachFromControllerPendingDestroy();
 }

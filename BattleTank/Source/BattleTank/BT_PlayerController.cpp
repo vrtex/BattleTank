@@ -24,7 +24,23 @@ void ABT_PlayerController::BeginPlay()
 void ABT_PlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	if(!GetControlledTank())
+		return;
 	AimTowardsCrosshair();
+}
+
+void ABT_PlayerController::SetPawn(APawn * NewPawn)
+{
+	Super::SetPawn(NewPawn);
+
+	if(!NewPawn)
+		return;
+
+	ATank * PossesedTank = Cast<ATank>(NewPawn);
+	if(!PossesedTank)
+		return;
+
+	PossesedTank->OnDeath.AddUniqueDynamic(this, &ABT_PlayerController::OnTankDeath);
 }
 
 ATank * ABT_PlayerController::GetControlledTank() const
@@ -32,6 +48,15 @@ ATank * ABT_PlayerController::GetControlledTank() const
 	return Cast<ATank>(GetPawn());
 }
 
+
+void ABT_PlayerController::OnTankDeath()
+{
+	/*
+	GetControlledTank()->DetachFromControllerPendingDestroy();
+	*/
+	StartSpectatingOnly();
+	
+}
 void ABT_PlayerController::AimTowardsCrosshair()
 {
 	ATank * Tank = GetControlledTank();
@@ -63,7 +88,7 @@ bool ABT_PlayerController::GetSightRayHitLocation(FVector & HitLocaton) const
 	FHitResult HitResult;
 	FVector TankLocation = PlayerCameraManager->GetCameraLocation();
 	FVector TraceEnd = TankLocation + LookDirection * AimRange;
-	bool bLookingAtGround = GetWorld()->LineTraceSingleByChannel(HitResult, TankLocation, TraceEnd, ECollisionChannel::ECC_Visibility);
+	bool bLookingAtGround = GetWorld()->LineTraceSingleByChannel(HitResult, TankLocation, TraceEnd, ECollisionChannel::ECC_Camera);
 	if(!bLookingAtGround) return false;
 	HitLocaton = HitResult.Location;
 	return true;

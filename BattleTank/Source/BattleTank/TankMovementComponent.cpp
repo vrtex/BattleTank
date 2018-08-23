@@ -40,13 +40,6 @@ void UTankMovementComponent::SetDirection(float Forward, float Right)
 
 
 	CurrentDirection = FVector(Right, 0, Forward).GetSafeNormal();
-	//CurrentDirection = FVector(Forward, Right, 0);
-	/*
-	Forward /= 2;
-	Right /= 2;
-	LeftTrack->SetThrottle(FMath::Sin(CurrentDirection.Rotation().Yaw));
-	RightTrack->SetThrottle(-FMath::Sin(CurrentDirection.Rotation().Yaw));
-	*/
 
 	float Force = FMath::Clamp<float>(CurrentDirection.Size(), 0, 1);
 	float ForwardForce = FVector::DotProduct(FVector(0, 0, 1), CurrentDirection) * Force;
@@ -65,7 +58,13 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 	FVector TankRightdDirection = GetOwner()->GetActorRightVector().GetSafeNormal();
 	FVector TankIndendedDirection = MoveVelocity.GetSafeNormal();
 
-	SetDirection(FVector::DotProduct(TankForwardDirection, TankIndendedDirection), FVector::CrossProduct(TankForwardDirection, TankIndendedDirection).Z);
+	float ForwardForce = FVector::DotProduct(TankForwardDirection, TankIndendedDirection);
+	float RightForce = FVector::DotProduct(TankRightdDirection, TankIndendedDirection);
+	if(ForwardForce < 0)
+		RightForce *= -1;
+
+	SetDirection(ForwardForce, RightForce);
+		//FVector::CrossProduct(TankForwardDirection, TankIndendedDirection).Z);
 	/*
 
 	IntendMoveForward(FVector::DotProduct(TankForwardDirection, TankIndendedDirection));

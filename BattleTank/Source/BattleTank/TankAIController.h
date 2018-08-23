@@ -18,10 +18,11 @@ class BATTLETANK_API ATankAIController : public AAIController
 	
 
 public:
-	void virtual BeginPlay() override;
+	virtual void BeginPlay() override;
 
-	void virtual Tick(float DeltaSeconds) override;
+	virtual void Tick(float DeltaSeconds) override;
 
+	virtual void SetPawn(APawn * NewPawn) override;
 
 	ATank * GetControlledTank() const;
 
@@ -29,6 +30,9 @@ public:
 	
 private:
 	ATank * Controlled = nullptr;
+
+	UFUNCTION()
+		void OnTankDeath();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 		float AcceptanceRadius = 3000;

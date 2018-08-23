@@ -20,6 +20,8 @@ public:
 	void virtual BeginPlay() override;
 
 	void virtual Tick(float DeltaSeconds) override;
+
+	virtual void SetPawn(APawn * NewPawn) override;
 	
 	AMortar * GetControlledMortart() const;
 
@@ -27,6 +29,9 @@ private:
 	AMortar * Controlled = nullptr;
 	
 	ATank * GetPlayerTank();
+
+	UFUNCTION()
+		void OnMortartDeath();
 	
 	
 };

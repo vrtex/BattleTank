@@ -12,6 +12,15 @@ AMortar::AMortar()
 	AimComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("MortarAiming"));
 }
 
+float AMortar::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+{
+	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+	CurrentHealth = FMath::Clamp<float>(CurrentHealth - Damage, 0, MaxHealth);
+	if(CurrentHealth <= 0.01f)
+		OnDeath.Broadcast();
+	return Damage;
+}
+
 // Called when the game starts or when spawned
 void AMortar::BeginPlay()
 {

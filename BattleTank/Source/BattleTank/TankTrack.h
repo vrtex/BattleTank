@@ -8,6 +8,10 @@
 #include "Runtime/Engine/Classes/Components/PrimitiveComponent.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
 #include "Runtime/Engine/Classes/Components/CapsuleComponent.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Runtime/Core/Public/Containers/Array.h"
+#include "SprungWheel.h"
+#include "TankWheel.h"
 #include "DrawDebugHelpers.h"
 #include "TankTrack.generated.h"
 
@@ -28,10 +32,18 @@ public:
 	//void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, Category = Movement)
-	void SetThrottle(float Throttle);
+		void SetThrottle(float Throttle);
 
 	void DriveTrack();
 
+
+	UFUNCTION(BlueprintCallable, Category = Movement)
+		void AddWheels(TArray<ASprungWheel *> ToAdd);
+
+	UFUNCTION(BlueprintCallable, Category = Movement)
+		void AddWheel(ASprungWheel * ToAdd);
+	
+	TArray<ASprungWheel *> GetWheels() const;
 	
 private:
 
@@ -41,9 +53,15 @@ private:
 
 	// Force applied to tank
 	UPROPERTY(EditAnywhere)
-		float Power = 40000000.f; // TODO does this work?
+		float Power = 40000000.f;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<ASprungWheel> WheelClass;
+
 
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit);
+
+	TArray<ASprungWheel *> Wheels;
 	
 };

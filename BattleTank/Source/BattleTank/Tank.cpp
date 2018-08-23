@@ -12,12 +12,14 @@ ATank::ATank()
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
 
 	TankAimingComponent->SetLaunchSpeed(LaunchSpeed);
+
 }
 
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
+	CurrentHealth = MaxHealth;
 }
 
 void ATank::AimAtLocation(const FVector & Target)
@@ -40,11 +42,18 @@ void ATank::Fire()
 	TankAimingComponent->Fire();
 }
 
+float ATank::GetHealthPercent() const
+{
+	return CurrentHealth / MaxHealth;
+}
+
 float ATank::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
 	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
-	UE_LOG(LogTemp, Warning, TEXT("Take damage: %f"), Damage);
-	return 0.0f;
+	CurrentHealth = FMath::Clamp<float>(CurrentHealth - Damage, 0, MaxHealth);
+	if(CurrentHealth <= 0.01f)
+		OnDeath.Broadcast();
+	return Damage;
 }
 
 // Called to bind functionality to input

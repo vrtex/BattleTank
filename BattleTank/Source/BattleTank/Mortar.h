@@ -7,6 +7,9 @@
 #include "GameFramework/Pawn.h"
 #include "Mortar.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMortarDelegate);
+
 UCLASS()
 class BATTLETANK_API AMortar : public APawn
 {
@@ -16,6 +19,9 @@ public:
 	// Sets default values for this pawn's properties
 	AMortar();
 
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	FMortarDelegate OnDeath;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -38,5 +44,10 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		UTankAimingComponent * AimComponent = nullptr;
-	
+
+	UPROPERTY(EditDefaultsOnly, Category = "Health")
+		float MaxHealth = 100.f;
+
+	UPROPERTY(VisibleAnywhere)
+		float CurrentHealth = MaxHealth;
 };

@@ -24,6 +24,8 @@ public:
 
 	void virtual Tick(float DeltaSeconds) override;
 
+	virtual void SetPawn(APawn * NewPawn) override;
+
 	UFUNCTION(BlueprintCallable, Category = Setup)
 		ATank * GetControlledTank() const;
 	
@@ -44,6 +46,9 @@ private:
 	bool GetSightRayHitLocation(FVector & HitLocaton) const;
 
 	void GetWorldDirection(FVector2D ScreenLocation, FVector & WorldDirection) const;
+
+	UFUNCTION()
+		void OnTankDeath();
 
 
 	UPROPERTY(EditAnywhere)
