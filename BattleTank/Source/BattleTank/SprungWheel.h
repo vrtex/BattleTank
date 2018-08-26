@@ -7,6 +7,7 @@
 #include "Runtime/Engine/Classes/PhysicsEngine/PhysicsConstraintComponent.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "Runtime/Engine/Classes/Components/SphereComponent.h"
+#include "Runtime/Engine/Classes/Engine/World.h"
 #include "SprungWheel.generated.h"
 
 UCLASS()
@@ -56,9 +57,6 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Setup")
 		float WheelMass = 1000.f;
-
-	UPROPERTY(EditAnywhere, Category = "Setup")
-		float Torque = 300.f;
 	
 	UPROPERTY(EditAnywhere, Category = "Setup")
 		float MaxSpeed = 25.f;

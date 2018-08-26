@@ -8,6 +8,7 @@ ASprungWheel::ASprungWheel()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	SetTickGroup(ETickingGroup::TG_PostPhysics);
 
 	Spring = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("Spring"));
 	SetRootComponent(Spring);
@@ -21,7 +22,7 @@ ASprungWheel::ASprungWheel()
 	Wheel = CreateDefaultSubobject<USphereComponent>(FName("Wheel"));
 	Wheel->AttachToComponent(Axle, FAttachmentTransformRules::KeepRelativeTransform);
 	Wheel->SetSimulatePhysics(true);
-	Wheel->SetRelativeLocation(FVector(0, 0, WheelOffset));
+	Wheel->SetRelativeLocation(FVector(0, 0, 0));
 	Wheel->SetMobility(EComponentMobility::Movable);
 
 	WheelAxle = CreateDefaultSubobject<UPhysicsConstraintComponent>(FName("Wheel Axle"));
@@ -33,6 +34,8 @@ void ASprungWheel::BeginPlay()
 {
 	Super::BeginPlay();
 
+
+	Wheel->SetNotifyRigidBodyCollision(true);
 	Wheel->OnComponentHit.AddDynamic(this, &ASprungWheel::OnHit);
 
 	SetupSpring();
@@ -42,6 +45,9 @@ void ASprungWheel::BeginPlay()
 void ASprungWheel::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if(GetWorld()->TickGroup != ETickingGroup::TG_PostPhysics)
+		return;
+	CurrentForce = 0;
 }
 
 void ASprungWheel::AddForce(float Magnitude)
@@ -51,7 +57,7 @@ void ASprungWheel::AddForce(float Magnitude)
 
 void ASprungWheel::SetThrottle(float Throttle)
 {
-	CurrentForce = Throttle * MaxSpeed * 100000;
+	CurrentForce = Throttle * MaxSpeed * 600000;
 }
 
 void ASprungWheel::SetupSpring()

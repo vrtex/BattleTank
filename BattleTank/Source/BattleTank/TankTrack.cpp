@@ -41,17 +41,17 @@ void UTankTrack::SetThrottle(float Throttle)
 	CurrentThrottle = Throttle;
 
 	for(auto W : Wheels)
-		W->SetThrottle(Throttle);
+		W->SetThrottle(Throttle / Wheels.Num());
 	
 }
 
 void UTankTrack::DriveTrack()
 {
+	/*
 	FVector ForceApplied = GetForwardVector() * Power * CurrentThrottle;
 
 	for(auto W : Wheels)
 		W->AddForce(CurrentThrottle);
-	/*
 	FVector Location = GetComponentLocation();
 	USceneComponent * TankRoot = GetOwner()->GetRootComponent();
 	Cast<UPrimitiveComponent>(TankRoot)->AddForceAtLocation(ForceApplied, Location);
